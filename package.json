@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development tsnd --respawn ./src/index.ts",
   
-    "build": "npm cache clean && npm install && if exist dist ( rmdir /s /q dist ) && tsc"
+    "build": "npm cache clean && npm install && rm -rf dist && tsc"
    
     
   },
