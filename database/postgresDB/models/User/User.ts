@@ -8,6 +8,9 @@ import {
 } from "sequelize";
 
 import { Uuidv4 } from "../../../utils/model";
+import { URLService } from "../URL/UrlService";
+import { OTP } from "../OTP"
+
 
 export type UserProvider = "google" | "email";
 
@@ -20,15 +23,20 @@ export class User extends Model<
   declare lastName: string;
   declare email: string;
   declare password: string;
-  declare confirmed: boolean;
-  declare confirmedAt: number;
   declare provider: UserProvider;
-  declare loginCount?: number;
-  declare avatar?: string;
-  declare avatarColor?: { background: string; text: string };
+  declare status: string;
+  declare confirmationCode: string;
+  // declare passwordResetToken: string;
+  // declare passwordResetExpire: Date;
+  // declare loginCount?: number;
+  // declare avatar?: string;
+  // declare avatarColor?: { background: string; text: string };
 }
 
 export default function initUser(DB: Sequelize) {
+
+  
+
   User.init(
     {
       id: {
@@ -56,13 +64,6 @@ export default function initUser(DB: Sequelize) {
         type: DataTypes.STRING(255),
         allowNull: false,
       },
-      confirmed: {
-        type: DataTypes.BOOLEAN(),
-        defaultValue: false,
-      },
-      confirmedAt: {
-        type: DataTypes.REAL(),
-      },
       provider: {
         type: DataTypes.STRING(),
         validate: {
@@ -74,15 +75,33 @@ export default function initUser(DB: Sequelize) {
         allowNull: false,
         defaultValue: "email",
       },
-      loginCount: {
-        type: DataTypes.REAL(),
+      status: {
+        type: DataTypes.STRING,
         allowNull: false,
-        defaultValue: 0,
+        defaultValue: 'Pending'
+      },
+      confirmationCode: {
+        type: DataTypes.STRING,
+        allowNull: false,
       }
     },
+   
     {
       sequelize: DB,
       timestamps: true,
     }
   );
+
+  //set association
+  User.hasMany(URLService, {
+    foreignKey: 'createdBy',
+    onDelete: 'CASCADE',
+    as: 'urls'
+  })
+
+  User.hasOne(OTP, {
+    foreignKey: 'generatedFor',
+    onDelete: 'CASCADE'
+  })
+  return User;
 }
