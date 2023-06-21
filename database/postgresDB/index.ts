@@ -1,10 +1,7 @@
 import dotEnv from "dotenv";
-import fs from "fs";
-import path from "path";
 import { Sequelize, DataTypes } from "sequelize";
 import { getModules } from "../../src/utils";
 import envConfigs from "../config/index";
-import setAssociation from "./models/setAssociation";
 dotEnv.config();
 
 const NODE_ENV = process.env.NODE_ENV as keyof typeof envConfigs;
