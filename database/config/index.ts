@@ -10,6 +10,7 @@ const envConfig = {
     development: {
         defaultDB: {
             url: process.env.DEV_DATABASE_URL,
+            // url: process.env.DEV_DATABASE_URL_LOCAL,
             dialect
         }
     },
