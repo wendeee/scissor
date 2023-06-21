@@ -5,10 +5,8 @@
   "main": "dist/src/index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development tsnd --respawn ./src/index.ts",
-  
-    "build": "npm cache clean --force && npm install && rm -rf dist && node --max-old-space-size=4096 ./node_modules/typescript/bin/tsc"
+    "build": "npm cache clean --force && npm install && rm -rf dist && ./node_modules/typescript/bin/tsc"
 
-   
     
   },
   "keywords": [],
@@ -16,6 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "@superfaceai/one-sdk": "^2.4.2",
+    "@types/lodash": "^4.14.195",
     "@types/uuid": "^9.0.1",
     "bcrypt": "^5.1.0",
     "cloudinary": "^1.37.2",
