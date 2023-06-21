@@ -3,3 +3,8 @@ export interface MessageObject {
     content: string;
     duration?: number;
   }
+
+  export interface ShortenURLForm {
+    longURL: string;
+    customName?: string;
+  }
