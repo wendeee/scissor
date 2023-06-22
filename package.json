@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development tsnd --respawn ./src/index.ts",
     "build": "npm cache clean --force && npm install && rm -rf dist && NODE_OPTIONS=--max-old-space-size=4096 ./node_modules/typescript/bin/tsc ",
-    "start": "NODE_ENV=production node dist/src/index.js"
+    "start": "cross-env NODE_ENV=production node dist/src/index.js"
   },
   "keywords": [],
   "author": "",
