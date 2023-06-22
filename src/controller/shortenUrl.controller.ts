@@ -1,4 +1,5 @@
 import { Router, Request, Response } from "express";
+import dotEnv from 'dotenv';
 
 import { ShortenURLForm } from "../../src/types/index";
 import DB from "../../database/postgresDB";
@@ -9,7 +10,7 @@ import {
 } from "../../src/routes/url/utils";
 import { sendSuccessRes, sendErrorRes } from "../../src/utils/sendRes";
 import { URLService } from "../../database/postgresDB/models/URL/UrlService";
-
+dotEnv.config()
 export async function createShortURL(req: Request, res: Response) {
   //@ts-ignore
   const user = req.user;
@@ -34,7 +35,7 @@ export async function createShortURL(req: Request, res: Response) {
 
     //check Node env
     const baseUrl =
-      process.env.NODE_ENV === "production"
+      process.env.NODE_ENV ==="production"
         ? process.env.BASE_URL_PROD
         : process.env.BASE_URL_DEV;
     // const baseUrl = `http://localhost:3001/`;
