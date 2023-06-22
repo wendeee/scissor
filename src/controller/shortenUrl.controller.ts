@@ -32,7 +32,12 @@ export async function createShortURL(req: Request, res: Response) {
       throw new Error("{400} URL is not valid");
     }
 
-    const baseUrl = `http://localhost:3001/`;
+    //check Node env
+    const baseUrl =
+      process.env.NODE_ENV === "production"
+        ? process.env.BASE_URL_PROD
+        : process.env.BASE_URL_DEV;
+    // const baseUrl = `http://localhost:3001/`;
 
     let UrlCode: any;
     let shortURL: string;
