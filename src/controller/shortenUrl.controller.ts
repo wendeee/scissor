@@ -37,7 +37,9 @@ export async function createShortURL(req: Request, res: Response) {
     const baseUrl =
       process.env.NODE_ENV ==="production"
         ? process.env.BASE_URL_PROD
-        : process.env.BASE_URL_DEV;
+        : process.env.BASE_URL_DEV
+
+    console.log('BASEURL: ', baseUrl)
     // const baseUrl = `http://localhost:3001/`;
 
     let UrlCode: any;
