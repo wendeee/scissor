@@ -1,8 +1,6 @@
 import { Router } from "express";
 
 import qrcode from "qrcode";
-import path from "path";
-import fs from "fs";
 
 import DB from "../../../database/postgresDB";
 import { URLService } from "../../../database/postgresDB/models/URL/UrlService";
@@ -72,8 +70,6 @@ export default function (router: Router) {
         res.status(200).json({ data: url.shortURL, qrCodeImageUrl });
       } catch (err) {
         sendErrorRes(err, res)
-        // console.error("Error generating and saving QR code:", err);
-        // res.status(500).json({ error: "Failed to generate and save QR code" });
       }
     }
   );

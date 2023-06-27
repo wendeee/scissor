@@ -53,23 +53,20 @@ export default function (router: Router){
                     if(user && user.provider === 'email'){
                         //send otp to user's email
                        const otpData =  await sendOTP(email)
-                       console.log('OTPDATA: ', otpData)
 
                        sendSuccessRes(res, {
                         data: {otpData}, message: {type: 'success', content: 'An OTP has been sent to your email'}
                        })
-                    //    res.status(200).json({
-                    //     data: {otpData}, message: {type: 'success', content: 'An OTP has been sent to your email'}
-                    //    })
+                   
                         
                     }else{
-                       
-                        return res.status(404).json('user not found or forgot password will be handled by oauth provider')
+                       throw new Error("{404}, user not found!")
+                        
                     }
                 })
             }catch(err){
                 sendErrorRes(err, res)
-                // res.status(500).json(err.message)
+               
             }
         }
     )

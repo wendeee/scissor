@@ -23,15 +23,15 @@ const [dbtype, username, passwordAndHost, portAndDatabase] =
       password,
       database,
       protocol: config.dialect,
-      dialectOptions: process.env.USE_SSL
-        ? {
-            ssl: {
-              required: true,
-              rejectUnauthorized: false,
+      // dialectOptions: process.env.USE_SSL
+      //   ? {
+      //       ssl: {
+      //         required: true,
+      //         rejectUnauthorized: false,
           
-            },
-          }
-        : {},
+      //       },
+      //     }
+      //   : {},
       pool: {
         max: 45,
         min: 0,

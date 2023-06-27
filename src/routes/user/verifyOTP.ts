@@ -7,7 +7,7 @@ import { sendOTP } from "../otp/utils";
 import { sendError, sendErrorRes, sendSuccessRes } from "../../../src/utils/sendRes";
 import { compareData, comparePassword } from "../../../database/utils";
 import Joi from "joi";
-import { hashData } from "database/utils";
+import { hashData } from "../../../database/utils";
 
 export interface VerifyOTPForm {
   otp: number;

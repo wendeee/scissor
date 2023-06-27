@@ -142,6 +142,9 @@ export default function (router: Router) {
           //   },
           // });
 
+          const baseUrl = process.env.NODE_ENV === "production"
+    ? process.env.BASE_URL_PROD
+    : process.env.BASE_URL_DEV;
           //send verification email
           let mailOptions = {
             from: process.env.EMAIL_USER,
@@ -150,7 +153,7 @@ export default function (router: Router) {
             html: `<h1>Email Confirmation</h1>
           <h2>Hello ${user.firstName}</h2>
           <p>Thank you for signing up on snipit. Please confirm your email by clicking on the following link</p>
-           <a href=http://localhost:3001/api/v1/auth/confirm/${user.confirmationCode}> Click here</a>
+           <a href=${baseUrl}api/v1/auth/confirm/${user.confirmationCode}> Click here</a>
          </div>`,
           };
 

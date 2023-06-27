@@ -5,8 +5,6 @@ import {
   sendError,
   sendErrorRes,
   sendSuccessRes
-  // sendFormattedError,
-  // sendSuccess,
 } from "../../utils/sendRes";
 
 import DB from "../../../database/postgresDB";
@@ -60,12 +58,14 @@ export default function (router: Router) {
 
       if (!user || !isValidPassword) {
         await transaction.rollback();
-        return res.status(400).json("Email or password incorrect!");
+       throw new Error("{404} Email or Password is incorrect!")
+       
       }
 
-      if(user.status.toLowerCase() === 'pending'){
-        res.status(401).json({data: {}, message: {type: 'success', content: 'Please confirm your account'}})
-      }
+      // if(user.status.toLowerCase() === 'pending'){
+        //throw new Error("{401} Account confirmation pending. Please confirm your account!");
+      // }
+
       //assign token
       const jwtToken = await loginUser({
         user,
@@ -78,11 +78,8 @@ export default function (router: Router) {
       delete modifiedResponse.password;
 
       sendSuccessRes(res, {data: {modifiedResponse, jwtToken}})
-      // res.status(200).json({data: {modifiedResponse, jwtToken}})
     } catch (err) {
       sendErrorRes(err, res)
-        // res.status(400).json("Login failed");
-    //   throw new Error("Login failed");
     }
   });
 }
