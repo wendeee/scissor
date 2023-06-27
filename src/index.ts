@@ -1,19 +1,17 @@
 import dotEnv from "dotenv";
 import express, { RequestHandler } from "express";
 import { startDB } from "../database";
-import { auth } from 'express-openid-connect'
+import { auth } from "express-openid-connect";
 import cors from "cors";
 import morgan from "morgan";
 import { catchAllRoute } from "./utils";
-import { config } from "./routes/user/signup/oauth/oauth.config";
+// import { config } from "./routes/user/signup/oauth/oauth.config";
 import routes from "./routes";
-
 
 dotEnv.config();
 
 const app = express();
-app.use(cors())
-
+app.use(cors());
 
 const isProduction = process.env.NODE_ENV === "production";
 const isTest = process.env.NODE_ENV === "test";
@@ -21,17 +19,13 @@ const isDevelopment = process.env.NODE_ENV === "development";
 
 startDB()
   .then(() => {
-    
-    app.set('trust proxy', true)
+    app.set("trust proxy", true);
 
-    // console.log((process.env.ORIGINS || "").split(","));
-    
     app.use([
       // cookieParser(process.env.COOKIE_SECRET),
       express.json(),
       morgan("combined"),
-      auth(config)
-
+      // auth(config)
     ]);
 
     app.use((_req, res, next) => {
@@ -47,7 +41,6 @@ startDB()
     });
 
     app.use(routes);
-
 
     const port = Number(
       process.env[
