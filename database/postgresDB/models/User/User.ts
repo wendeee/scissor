@@ -9,8 +9,7 @@ import {
 
 import { Uuidv4 } from "../../../utils/model";
 import { URLService } from "../URL/UrlService";
-import { OTP } from "../OTP"
-
+import { OTP } from "../OTP";
 
 export type UserProvider = "google" | "email";
 
@@ -19,8 +18,7 @@ export class User extends Model<
   InferCreationAttributes<User>
 > {
   declare id: CreationOptional<string>;
-  declare firstName: string;
-  declare lastName: string;
+  declare name: string;
   declare email: string;
   declare password: string;
   declare provider: UserProvider;
@@ -34,9 +32,6 @@ export class User extends Model<
 }
 
 export default function initUser(DB: Sequelize) {
-
-  
-
   User.init(
     {
       id: {
@@ -45,12 +40,7 @@ export default function initUser(DB: Sequelize) {
         primaryKey: true,
         unique: true,
       },
-      firstName: {
-        type: DataTypes.STRING(255),
-        unique: false,
-        allowNull: false,
-      },
-      lastName: {
+      name: {
         type: DataTypes.STRING(255),
         unique: false,
         allowNull: false,
@@ -78,14 +68,14 @@ export default function initUser(DB: Sequelize) {
       status: {
         type: DataTypes.STRING,
         allowNull: false,
-        defaultValue: 'Pending'
+        defaultValue: "Pending",
       },
       confirmationCode: {
         type: DataTypes.STRING,
         allowNull: false,
-      }
+      },
     },
-   
+
     {
       sequelize: DB,
       timestamps: true,
@@ -94,14 +84,14 @@ export default function initUser(DB: Sequelize) {
 
   //set association
   User.hasMany(URLService, {
-    foreignKey: 'createdBy',
-    onDelete: 'CASCADE',
-    as: 'urls'
-  })
+    foreignKey: "createdBy",
+    onDelete: "CASCADE",
+    as: "urls",
+  });
 
   User.hasOne(OTP, {
-    foreignKey: 'generatedFor',
-    onDelete: 'CASCADE'
-  })
+    foreignKey: "generatedFor",
+    onDelete: "CASCADE",
+  });
   return User;
 }

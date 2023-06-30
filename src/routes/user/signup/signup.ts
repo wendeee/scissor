@@ -15,8 +15,7 @@ import { signJwtToken, sendEmail } from "../utils";
 
 //create sign up interface
 export interface SignUpForm {
-  firstName: string;
-  lastName: string;
+  name: string;
   email: string;
   password: string;
   confirmPassword: string;
@@ -26,20 +25,12 @@ const formValidation: RequestHandler = (req, res, next) => {
   const body = req.body;
 
   const schema = Joi.object({
-    firstName: Joi.string()
+    name: Joi.string()
       .min(2)
       .max(85)
-      //   .pattern(/^([a-zA-Z0-9]{2, 255})$/)
-      //   .rule({ message: "First name should be between 2 and 255 characters." })
-      .required(),
-    lastName: Joi.string()
-      .min(2)
-      .max(85)
-      //   .pattern(/^([a-zA-Z0-9]{2, 255})$/)
-      //   .rule({ message: "Last name should be between 2 and 255 characters." })
+
       .required(),
     email: Joi.string().min(3).max(150),
-    //   .pattern(/^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{1,})?$/),
 
     password: Joi.string().min(8).max(32),
 
@@ -71,13 +62,9 @@ export default function (router: Router) {
       try {
         const transaction = await DB.transaction();
 
-        let { firstName, lastName, email, password, confirmPassword } =
-          req.body;
+        let { name, email, password, confirmPassword } = req.body;
 
-        // console.log(password, confirmPassword)
         email = email?.toLowerCase()?.trim();
-
-        console.log(firstName);
 
         // //find if user with email already exist in the database
 
@@ -90,24 +77,14 @@ export default function (router: Router) {
         const hashedPassword = await hashPassword(password);
         const token = await signJwtToken({ email });
 
-        // const user = await User.create({
-        //       firstName,
-        //       lastName,
-        //       email,
-        //       password,
-        //       confirmationCode: '',
-        //     });
-        //     console.log('USER', user)
-        //     // await transaction.commit();
-
         if (userInDB) {
           await transaction.rollback();
           throw new Error("Email is already taken.");
         } else {
           //create a new user
           const user = await User.create({
-            firstName,
-            lastName,
+            name,
+
             email,
             password: hashedPassword,
             confirmationCode: token,
@@ -115,7 +92,7 @@ export default function (router: Router) {
 
           const modifiedResponse = { ...user.get() };
           delete modifiedResponse.password;
-          // console.log('USER', user)
+
           await transaction.commit();
 
           sendSuccessRes(res, {
@@ -129,29 +106,17 @@ export default function (router: Router) {
             },
           });
 
-
-          // res.status(201).json({
-          //   status: "success",
-          //   data: {
-          //     modifiedResponse,
-          //   },
-          //   message: {
-          //     type: "success",
-          //     content:
-          //       "User has been successfully registered. Please confirm your email.",
-          //   },
-          // });
-
-          const baseUrl = process.env.NODE_ENV === "production"
-    ? process.env.BASE_URL_PROD
-    : process.env.BASE_URL_DEV;
+          const baseUrl =
+            process.env.NODE_ENV === "production"
+              ? process.env.BASE_URL_PROD
+              : process.env.BASE_URL_DEV;
           //send verification email
           let mailOptions = {
             from: process.env.EMAIL_USER,
             to: email,
             subject: "Please confirm your email",
             html: `<h1>Email Confirmation</h1>
-          <h2>Hello ${user.firstName}</h2>
+          <h2>Hello ${user.name}</h2>
           <p>Thank you for signing up on snipit. Please confirm your email by clicking on the following link</p>
            <a href=${baseUrl}api/v1/auth/confirm/${user.confirmationCode}> Click here</a>
          </div>`,
@@ -160,9 +125,7 @@ export default function (router: Router) {
           await sendEmail(mailOptions);
         }
       } catch (err) {
-        sendErrorRes(err, res)
-        // res.status(500).json(err.message);
-        // throw new Error(err.message);
+        sendErrorRes(err, res);
       }
     }
   );
