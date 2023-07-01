@@ -2,6 +2,7 @@ import { Router, Request, Response } from "express";
 import { authenticate } from "../../../src/utils/middleware";
 import DB from "../../../database/postgresDB";
 import { URLService } from "../../../database/postgresDB/models/URL/UrlService";
+import { QRCode } from "../../../database/postgresDB/models/QRCode/QRCode";
 import { sendSuccessRes, sendErrorRes } from "../../../src/utils/sendRes";
 
 export default function (router: Router) {
@@ -24,23 +25,37 @@ export default function (router: Router) {
         const transaction = await DB.transaction();
 
         const generatedUrlHistory = await URLService.findAll({
-            where: {createdBy: userId}, transaction
-        })
+          where: { createdBy: userId },
+          transaction,
+        });
 
-       const generatedShortUrl =  generatedUrlHistory.map((el) => ({
-        shortURL: el.shortURL,
-        longURL: el.longURL,
-        numberOfClicksOnShortUrl: el.clicks,
-        clickLocation: el.clickHistory
-       }))
+        const shortUrlCount = generatedUrlHistory.length;
+        const QRCodeCount = await QRCode.count({
+          where: { createdBy: userId },
+          transaction,
+        });
 
-       sendSuccessRes(res, {data: {generatedShortUrl},  message: { type: "success", content: "URL history retrieved!" }})
+        const generatedShortUrl = generatedUrlHistory.map((el) => ({
+          shortURL: el.shortURL,
+          longURL: el.longURL,
+          numberOfClicksOnShortUrl: el.clicks,
+          clickLocation: el.clickHistory,
+          id: el.id,
+          qrcodeurl: el.qrcodeurl,
+          clicks: el.clicks,
+          createdat: el.createdAt,
+        }));
+
+        sendSuccessRes(res, {
+          data: { generatedShortUrl, shortUrlCount, QRCodeCount },
+          message: { type: "success", content: "URL history retrieved!" },
+        });
         // res.status(200).json({
         //     data: { generatedShortUrl },
         //     message: { type: "success", content: "URL history retrieved!" },
         //   });
       } catch (err) {
-        sendErrorRes(err, res)
+        sendErrorRes(err, res);
         // res.status(500).json({ error: "Error occurred!", message: err.message });
       }
     }

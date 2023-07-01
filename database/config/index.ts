@@ -9,8 +9,8 @@ const dialect = process.env.DB_DIALECT as Dialect;
 const envConfig = {
   development: {
     defaultDB: {
-      url: process.env.DEV_DATABASE_URL,
-      // url: process.env.DEV_DATABASE_URL_LOCAL,
+      // url: process.env.DEV_DATABASE_URL,
+      url: process.env.DEV_DATABASE_URL_LOCAL,
       dialect,
     },
   },

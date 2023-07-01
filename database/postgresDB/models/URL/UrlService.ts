@@ -27,6 +27,7 @@ export class URLService extends Model<
   declare clicks: number;
   declare qrcodeurl: string;
   declare clickHistory: ClickHistoryItem[];
+  createdAt?: Date;
 }
 
 export default function initURLService(DB: Sequelize) {
@@ -63,6 +64,9 @@ export default function initURLService(DB: Sequelize) {
         type: DataTypes.REAL,
         allowNull: true,
         defaultValue: 0,
+      },
+      createdAt: {
+        type: DataTypes.DATE,
       },
       qrcodeurl: {
         type: DataTypes.STRING,

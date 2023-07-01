@@ -10,6 +10,7 @@ import {
 import { Uuidv4 } from "../../../utils/model";
 import { URLService } from "../URL/UrlService";
 import { OTP } from "../OTP";
+import { QRCode } from "../QRCode/QRCode";
 
 export type UserProvider = "google" | "email";
 
@@ -91,6 +92,11 @@ export default function initUser(DB: Sequelize) {
 
   User.hasOne(OTP, {
     foreignKey: "generatedFor",
+    onDelete: "CASCADE",
+  });
+
+  User.hasMany(QRCode, {
+    foreignKey: "createdBy",
     onDelete: "CASCADE",
   });
   return User;

@@ -1,11 +1,7 @@
 import { comparePassword } from "../../../database/utils";
 import { Router, RequestHandler } from "express";
 import Joi from "joi";
-import {
-  sendError,
-  sendErrorRes,
-  sendSuccessRes
-} from "../../utils/sendRes";
+import { sendError, sendErrorRes, sendSuccessRes } from "../../utils/sendRes";
 
 import DB from "../../../database/postgresDB";
 import { User } from "../../../database/postgresDB/models/User/User";
@@ -58,13 +54,8 @@ export default function (router: Router) {
 
       if (!user || !isValidPassword) {
         await transaction.rollback();
-       throw new Error("{404} Email or Password is incorrect!")
-       
+        throw new Error("{404} Email or Password is incorrect!");
       }
-
-      // if(user.status.toLowerCase() === 'pending'){
-        //throw new Error("{401} Account confirmation pending. Please confirm your account!");
-      // }
 
       //assign token
       const jwtToken = await loginUser({
@@ -74,12 +65,15 @@ export default function (router: Router) {
         res,
       });
 
-      const modifiedResponse = {...user.get()}
+      const modifiedResponse = { ...user.get() };
       delete modifiedResponse.password;
 
-      sendSuccessRes(res, {data: {modifiedResponse, jwtToken}})
+      sendSuccessRes(res, {
+        data: { modifiedResponse, jwtToken },
+        message: { type: "success", content: "Login successful!!!" },
+      });
     } catch (err) {
-      sendErrorRes(err, res)
+      sendErrorRes(err, res);
     }
   });
 }
