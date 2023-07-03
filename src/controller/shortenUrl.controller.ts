@@ -46,7 +46,7 @@ export async function createShortURL(req: Request, res: Response) {
           data: { customUrl },
           message: {
             type: "success",
-            content: "ShortUrl generated successfully!!",
+            content: "ShortUrl generated successfully from cache!!",
           },
         });
       }
