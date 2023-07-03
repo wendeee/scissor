@@ -2,6 +2,7 @@ import dotEnv from "dotenv";
 import express, { RequestHandler } from "express";
 import { startDB } from "../database";
 import { auth } from "express-openid-connect";
+import { rateLimit } from "express-rate-limit";
 import cors from "cors";
 import morgan from "morgan";
 import { catchAllRoute } from "./utils";
@@ -22,9 +23,14 @@ startDB()
     app.set("trust proxy", true);
 
     app.use([
-      // cookieParser(process.env.COOKIE_SECRET),
       express.json(),
       morgan("combined"),
+      rateLimit({
+        windowMs: 15 * 60 * 1000, // 15 minutes
+        max: 100,
+        standardHeaders: true,
+        legacyHeaders: false,
+      }),
       // auth(config)
     ]);
 
@@ -62,6 +68,4 @@ startDB()
     console.log("Error starting server or database!", { err });
 
     catchAllRoute(app, "Error starting database or server!");
-
-    // process.exit(1)
   });
