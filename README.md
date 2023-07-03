@@ -2,7 +2,7 @@
 
 # A Backend API for a URL Shortner (Snipit)
 
-Snipit is a backend API for a social media platform built by <a href="https://github.com/wendeee">Chinwendu Enyinna</a> using a couple JavaScript-based server side technologies. This API follows the REST architectural design pattern.
+Snipit is a URL Shortener API. Snipit allows you shorten long URLs, customize links, and generate qrcode for shortned links. This API was built by <a href="https://github.com/wendeee">Chinwendu Enyinna</a> using JavaScript-based server side technologies. This API follows the REST architectural design pattern.
 
 ---
 
