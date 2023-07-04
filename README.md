@@ -23,7 +23,7 @@ Snipit is a URL Shortener API. Snipit allows you shorten long URLs, customize li
     <a href="https://github.com/wendeee/scissor#readme"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://snipit.onrender.com">View Demo</a>
+    <a href="https://scissor-snipit.onrender.com/">View Demo</a>
   </p>
 </div>
 
